@@ -5,11 +5,32 @@ function App() {
 
   return (
     <>
-      <h1 className='text-blue-500 text-[50px] font-bold italic underline border-4 border-red-500'>Janitha</h1>
+      <div className="h-[700px] w-[700px] border-[5px]">
+        <div className="h-[600px] w-[600px] bg-yellow-300 flex flex-col"> 
 
-      <ProductCard name="iPad" price="$18.99" image="://www.goodhousekeeping.com/uk/product-reviews/tech/a61095166/apple-ipad-10th-generation-review/" />
+          <div className='h-[100px] w-[100px] bg-red-500'>
 
-      <ProductCard name="iPhone" price="$17.99" image="https://www.apple.com/iphone-15-pro/" />
+          </div>
+
+          <div className='h-[100px] w-[100px] bg-blue-500'>
+
+          </div>
+
+          <div className='h-[100px] w-[100px] bg-pink-500'>
+
+          </div>
+
+          <div className='h-[100px] w-[100px] bg-green-500'>
+
+          </div>
+
+          <div className='h-[100px] w-[100px] bg-gray-500'>
+
+          </div>
+
+        </div>
+        
+      </div>
     </>
   )
 }
