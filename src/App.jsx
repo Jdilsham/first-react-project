@@ -12,7 +12,7 @@ function App() {
 
           </div>
 
-          <div className='h-[100px] w-[100px] bg-blue-500'>
+          <div className='h-[100px] w-[100px] bg-blue-500 m-[20px]'>
 
           </div>
 
