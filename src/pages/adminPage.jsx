@@ -15,6 +15,7 @@ export default function AdminPage() {
             <Route path="orders" element={<h1>Manage Orders</h1>} />
           </Routes>
         </div>
+        
       </div>  
     );
 
