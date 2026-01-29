@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
-import ProductCard from './components/productCard'
+import AdminPage from './pages/adminPage'
 
 function App() {
 
@@ -11,7 +11,7 @@ function App() {
 
           <Routes path="/">
               <Route path="/" element={<h1>Home Page</h1>}/>
-              <Route path="/admin" element={<h1>Admin Page</h1>}/>
+              <Route path="/admin/*" element={<AdminPage/>}/>
           </Routes>
 
         </div>
