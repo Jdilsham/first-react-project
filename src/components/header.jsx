@@ -11,7 +11,7 @@ export default function Header() {
       <nav className="w-full h-full flex items-center justify-center gap-10 text-lg font-semibold">
         <a href="/" className="hover:underline">Home</a>
         <a href="/products" className="hover:underline">Products</a>
-        <a href="/admin" className="hover:underline">Admin</a>
+        {/* <a href="/admin" className="hover:underline">Admin</a> */}
         <a href="/about" className="hover:underline">About</a>
         <a href="/contact" className="hover:underline">Contact</a>
       </nav>
