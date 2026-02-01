@@ -1,10 +1,13 @@
 import axios from "axios";
 import { Lock, User } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function handleLogin() {
     try{
@@ -16,14 +19,18 @@ export default function LoginPage() {
             }
           );
           const user = response.data.user;
+
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(user));
+          toast.success("Login successful!");
           if (user.role === "ADMIN") {
-            window.location.href = "/admin";
+            navigate("/admin");
           }else{
-            window.location.href = "/";
+            navigate("/");
           }
     }catch(error){
       console.error("Login error:", error);
-      alert("Login failed. Please check your credentials and try again.");
+      toast.error("Login failed. Please check your credentials.");
     }
   }
 
