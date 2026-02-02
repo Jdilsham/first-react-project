@@ -98,21 +98,24 @@ export default function AdminProductPage(){
                     </tr>
                 </thead>
                 <tbody>
-
-                </tbody>
+                    {products.map((item) => (
+                        <tr key={item.productID}>
+                            <td>
+                                <img
+                                src={item.images[0]}
+                                className="w-16 h-16 object-cover"
+                                alt={item.name}
+                                />
+                            </td>
+                            <td>{item.productID}</td>
+                            <td>{item.name}</td>
+                            <td>{item.price}</td>
+                            <td>{item.labeledPrice}</td>
+                            <td>{item.category}</td>
+                        </tr>
+                    ))}
+                    </tbody>
             </table>
-
-           {
-                
-
-                products.map(
-                    (item)=>{
-                        return <span className="w-full text-accent">
-                            {item.name} - {item.price}
-                        </span>
-                    }
-                )
-            }
         </div>
     );
 }
