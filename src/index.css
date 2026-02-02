@@ -2,7 +2,38 @@
 
 
 @theme {
-    --color-accent: #F93827;
-    --color-primary: #16C47F;
-    --color-secondary: #FFD65A;
+  /* ===== PRIMARY BRAND COLOR ===== */
+  /* Use for: sidebar, main buttons, active menu, edit actions */
+  --color-primary: #22C55E; /* Green */
+
+  /* ===== ACCENT / DANGER COLOR ===== */
+  /* Use for: delete buttons, errors, warnings, destructive actions */
+  --color-accent: #EF4444; /* Red */
+
+  /* ===== SECONDARY / HIGHLIGHT COLOR ===== */
+  /* Use for: page background, sections, subtle highlights */
+  --color-secondary: #FFF4CC; /* Soft Yellow */
+
+  /* ===== SUCCESS COLOR ===== */
+  /* Use for: prices, success messages, completed status */
+  --color-success: #16A34A;
+
+  /* ===== INFO COLOR ===== */
+  /* Use for: category badges, info labels */
+  --color-info: #2563EB;
+
+  /* ===== BACKGROUND COLORS ===== */
+  /* Use for: cards, tables */
+  --color-card: #FFFFFF;
+
+  /* ===== TEXT COLORS ===== */
+  /* Use for: main text */
+  --color-text: #111827;
+
+  /* Use for: muted text, descriptions */
+  --color-text-muted: #6B7280;
+
+  /* ===== BORDERS & DIVIDERS ===== */
+  /* Use for: table borders, row dividers */
+  --color-border: #E5E7EB;
 }

@@ -1,121 +1,119 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FiEdit } from "react-icons/fi";
+import { CiCirclePlus } from "react-icons/ci";
 
-const sampleProducts = [
-  {
-    id: 1,
-    productID: "COS24001",
-    name: "Flawless Finish Liquid Foundation - Beige",
-    category: "Makeup",
-    price: 2299,
-    labeledPrice: 2599,
-    images: ["https://example.com/foundation-beige.jpg"],
-    altNames: ["Liquid Foundation", "Beige Foundation"],
-    createdAt: "2026-02-01T10:30:00Z",
-  },
-  {
-    id: 2,
-    productID: "COS24002",
-    name: "Velvet Matte Lipstick - Rose Red",
-    category: "Makeup",
-    price: 1499,
-    labeledPrice: 1799,
-    images: ["https://example.com/lipstick-rose.jpg"],
-    altNames: ["Matte Lipstick", "Rose Lipstick"],
-    createdAt: "2026-02-01T11:15:00Z",
-  },
-  {
-    id: 3,
-    productID: "COS24003",
-    name: "Hydrating Face Moisturizer",
-    category: "Skincare",
-    price: 1999,
-    labeledPrice: 2299,
-    images: ["https://example.com/moisturizer.jpg"],
-    altNames: ["Face Cream", "Daily Moisturizer"],
-    createdAt: "2026-02-01T12:00:00Z",
-  },
-  {
-    id: 4,
-    productID: "COS24004",
-    name: "Waterproof Mascara - Black",
-    category: "Makeup",
-    price: 1299,
-    labeledPrice: 1599,
-    images: ["https://example.com/mascara-black.jpg"],
-    altNames: ["Black Mascara", "Waterproof Mascara"],
-    createdAt: "2026-02-01T13:20:00Z",
-  },
-  {
-    id: 5,
-    productID: "COS24005",
-    name: "Nourishing Hair Serum",
-    category: "Hair Care",
-    price: 1799,
-    labeledPrice: 2099,
-    images: ["https://example.com/hair-serum.jpg"],
-    altNames: ["Hair Oil", "Hair Treatment"],
-    createdAt: "2026-02-01T14:10:00Z",
-  },
-];
+export default function AdminProductPage() {
+  const [products, setProducts] = useState([]);
 
+    useEffect(() => {
+        axios
+        .get(import.meta.env.VITE_API_URL + "/api/products")
+        .then((response) => {
+            setProducts(response.data);
+        })
+        .catch((error)=>{
+            console.log(error);
+        });
+    }, []);
 
-export default function AdminProductPage(){
+  return (
+    <div className="w-full h-full p-6 bg-[color:var(--color-secondary)]">
+        <Link className="fixed right-[50px] bottom-[50px] text-5xl hover:text-[color:var(--color-primary)]">
+            <CiCirclePlus />
+        </Link>
 
-    const [products, getProducts] = useState(sampleProducts);
+        <div className="bg-[color:var(--color-card)] rounded-xl shadow-lg overflow-hidden border border-[color:var(--color-border)]">
 
-    // axios.get(import.meta.env.VITE_API_URL + "/api/products").then(
-    //     (response)=>{
-    //         console.log(response.data);
-    //     }
-    // )
+            <table className="w-full text-sm text-left text-[color:var(--color-text)]">
 
-    return(
+            {/* TABLE HEADER */}
+            <thead className="bg-gray-300 text-[color:var(--color-text-muted)] uppercase text-xs tracking-wider">
+                <tr>
+                <th className="px-6 py-4">Image</th>
+                <th className="px-6 py-4">Product ID</th>
+                <th className="px-6 py-4">Product Name</th>
+                <th className="px-6 py-4">Price</th>
+                <th className="px-6 py-4">Labelled Price</th>
+                <th className="px-6 py-4">Category</th>
+                <th className="px-6 py-4">Actions</th>
+                </tr>
+            </thead>
 
-        <div className="w-full h-full">
+            {/* TABLE BODY */}
+            <tbody className="divide-y divide-[color:var(--color-border)]">
+                {products.map((item) => (
+                <tr
+                    key={item.product_id}
+                    className="hover:bg-[color:var(--color-row-hover)] transition"
+                >
+                    {/* Image */}
+                    <td className="px-6 py-4">
+                    <img
+                        src={item.images[0]}
+                        alt={item.name}
+                        className="w-14 h-14 rounded-lg object-cover border border-[color:var(--color-border)]"
+                    />
+                    </td>
 
-            <table  className="w-full border">
-                <thead>
-                    <tr>
-                        <th>
-                            Image
-                        </th>
-                        <th>
-                            Product ID
-                        </th>
-                        <th>
-                            Product Name
-                        </th>
-                        <th>
-                            Product Price
-                        </th>
-                        <th>
-                            Labelled Price
-                        </th>
-                        <th>
-                            Catagory
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((item) => (
-                        <tr key={item.productID}>
-                            <td>
-                                <img
-                                src={item.images[0]}
-                                className="w-16 h-16 object-cover"
-                                alt={item.name}
-                                />
-                            </td>
-                            <td>{item.productID}</td>
-                            <td>{item.name}</td>
-                            <td>{item.price}</td>
-                            <td>{item.labeledPrice}</td>
-                            <td>{item.category}</td>
-                        </tr>
-                    ))}
-                    </tbody>
+                    {/* Product ID */}
+                    <td className="px-6 py-4 font-medium">
+                    {item.product_id}
+                    </td>
+
+                    {/* Name */}
+                    <td className="px-6 py-4">
+                    {item.name}
+                    </td>
+
+                    {/* Price */}
+                    <td className="px-6 py-4 font-semibold text-[color:var(--color-success)]">
+                    Rs. {item.price}
+                    </td>
+
+                    {/* Labelled Price */}
+                    <td className="px-6 py-4 text-[color:var(--color-text-muted)] line-through">
+                    Rs. {item.labeled_price}
+                    </td>
+
+                    {/* Category */}
+                    <td className="px-6 py-4">
+                    <span
+                        className="px-3 py-1 text-xs font-semibold rounded-full
+                        bg-[color:var(--color-info-bg)] text-[color:var(--color-info-text)]"
+                    >
+                        {item.category}
+                    </span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="px-6 py-4">
+                    <div className="flex gap-5">
+                        <button>
+                        <AiOutlineDelete
+                            className="text-[22px] text-[color:var(--color-text-muted)]
+                            hover:text-[color:var(--color-accent)] transition"
+                        />
+                        </button>
+
+                        <button>
+                        <FiEdit
+                            className="text-[20px] text-[color:var(--color-text-muted)]
+                            hover:text-[color:var(--color-primary)] transition"
+                        />
+                        </button>
+                    </div>
+                    </td>
+                </tr>
+                ))}
+            </tbody>
+
             </table>
+          
         </div>
-    );
+    </div>
+
+  );
 }
