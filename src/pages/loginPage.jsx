@@ -29,7 +29,6 @@ export default function LoginPage() {
             navigate("/");
           }
     }catch(error){
-      console.error("Login error:", error);
       toast.error("Login failed. Please check your credentials.");
     }
   }
@@ -43,7 +42,7 @@ export default function LoginPage() {
         </h1>
         <p className="text-lg text-white/80 max-w-md">
           Login to continue managing your services with{" "}
-          <span className="font-semibold text-cyan-300">FixMate</span>.
+          <span className="font-semibold text-cyan-300">Dinu Fashion</span>.
         </p>
       </div>
 
