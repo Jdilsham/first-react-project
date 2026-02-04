@@ -13,7 +13,8 @@ export default function TestPage() {
     const [file, setFile] = useState(null);
 
     async function uploadImage(){
-        await meediaUpload(file)
+        const link = await meediaUpload(file)
+        console.log(link);
     }
 
     return (
