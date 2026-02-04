@@ -6,6 +6,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { BsBox2Heart } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
 import AdminProductPage from "./admin/adminProductPage";
+import AddProduct from "./admin/adminAddNewProduct";
 
 export default function AdminPage() {
   return (
@@ -109,6 +110,12 @@ export default function AdminPage() {
                 <h1 className="text-xl font-semibold text-gray-800">
                   Manage Users
                 </h1>
+              }
+            />
+            <Route
+              path="/add-product"
+              element={
+                <AddProduct/>
               }
             />
           </Routes>
