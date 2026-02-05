@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { CiCirclePlus } from "react-icons/ci";
 
 export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -109,7 +110,9 @@ export default function AdminProductPage() {
                         />
                         </button>
 
-                        <button>
+                        <button onClick={()=>navigate("/admin/update-product",{
+                            state : item
+                        })}>
                         <FiEdit
                             className="text-[20px] text-[color:var(--color-text-muted)]
                             hover:text-[color:var(--color-primary)] transition"
