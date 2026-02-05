@@ -38,6 +38,7 @@ export default function AdminProductPage() {
                     <th className="px-6 py-4">Price</th>
                     <th className="px-6 py-4">Labelled Price</th>
                     <th className="px-6 py-4">Category</th>
+                    <th className="px-6 py-4">Stock</th>
                     <th className="px-6 py-4">Actions</th>
                 </tr>
             </thead>
@@ -85,6 +86,16 @@ export default function AdminProductPage() {
                         bg-[color:var(--color-info-bg)] text-[color:var(--color-info-text)]"
                     >
                         {item.category}
+                    </span>
+                    </td>
+
+                    {/* stock */}
+                    <td className="px-6 py-4">
+                    <span
+                        className="px-3 py-1 text-xs font-semibold rounded-full
+                        bg-[color:var(--color-info-bg)] text-[color:var(--color-info-text)]"
+                    >
+                        {item.stock}
                     </span>
                     </td>
 

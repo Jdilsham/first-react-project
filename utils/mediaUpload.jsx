@@ -24,7 +24,7 @@ export default function meediaUpload(file){
                 })
                 .then(()=>{
                     const publicurl = superbase.storage.from("images")
-                        .getPublicUrl(file.name).data.publicUrl;
+                        .getPublicUrl(filename).data.publicUrl;
 
                     resolve(publicurl);
                 }).catch(
