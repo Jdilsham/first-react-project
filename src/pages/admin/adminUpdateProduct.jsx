@@ -7,7 +7,6 @@ import axios from "axios";
 export default function AddProduct() {
     
     const location = useLocation()
-    console.log(location);
 
   const [productID, setProfductID] = useState(location.state.product_id);
   const [name, setName] = useState(location.state.name);

@@ -120,11 +120,11 @@ export default function AdminPage() {
               }
             />
             <Route
-            path="/update-product"
-            element={
-              <UpdateProduct/>
-            }
-          />
+              path="/update-product"
+              element={
+                <UpdateProduct/>
+              }
+            />
           </Routes>
         </div>
 

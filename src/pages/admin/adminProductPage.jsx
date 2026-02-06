@@ -5,8 +5,23 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { CiCirclePlus } from "react-icons/ci";
 
+function ProductDeleteConfirm(props){
+    const productid = props.product_id;
+    const close = props.close;
+
+    return <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-100 flex justify-center items-center">
+        <div className="w-[500px] h-[300px] bg-white relative">
+            <button onClick={close} className="absolute right-[0px] w-[40px] h-[40px] rounded-full bg-red-600 text-white hover:color-brown-300">
+                X
+            </button>
+        </div>
+    </div>
+}
+
 export default function AdminProductPage() {
+
   const [products, setProducts] = useState([]);
+  const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,6 +37,9 @@ export default function AdminProductPage() {
 
   return (
     <div className="w-full h-full p-6 bg-[color:var(--color-secondary)]">
+        {
+            isDeleteConfirmVisible && <ProductDeleteConfirm close={()=>{setIsDeleteConfirmVisible(false)}}/>
+        }
         <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-[color:var(--color-primary)]">
             <CiCirclePlus />
         </Link>
@@ -103,7 +121,11 @@ export default function AdminProductPage() {
                     {/* Actions */}
                     <td className="px-6 py-4">
                     <div className="flex gap-5">
-                        <button>
+                        <button 
+                            onClick={()=>{
+                               setIsDeleteConfirmVisible(true)
+                            }}
+                        >
                         <AiOutlineDelete
                             className="text-[22px] text-[color:var(--color-text-muted)]
                             hover:text-[color:var(--color-accent)] transition"

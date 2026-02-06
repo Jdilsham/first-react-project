@@ -1,73 +1,137 @@
-import { Pencil } from "lucide-react";
+import {
+  Pencil,
+  MapPin,
+  Shield,
+  User,
+  Mail,
+  Phone,
+  Calendar
+} from "lucide-react";
 
 export default function ProfilePage() {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      {/* Page Title */}
-      <h1 className="text-2xl font-semibold mb-6">My Profile</h1>
+    <div className="min-h-screen bg-gray-50 px-6 py-8">
+      {/* Title */}
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">My Profile</h1>
 
-      {/* Profile Header */}
-      <div className="bg-white rounded-xl shadow p-6 flex items-center gap-6 mb-6">
-        <img
-          src="https://i.pravatar.cc/150?img=3"
-          alt="Profile"
-          className="w-20 h-20 rounded-full object-cover"
-        />
+      {/* Header */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+        <div className="flex items-center gap-5">
+          <img
+            src="https://i.pravatar.cc/150?img=3"
+            className="w-24 h-24 rounded-full object-cover ring-4 ring-orange-100"
+            alt="profile"
+          />
 
-        <div>
-          <h2 className="text-lg font-semibold">Natashia Khaleira</h2>
-          <p className="text-sm text-gray-500">Admin</p>
-          <p className="text-sm text-gray-400">Leeds, United Kingdom</p>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800">
+              Natashia Khaleira
+            </h2>
+
+            <p className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+              <Shield size={14} /> Admin
+            </p>
+
+            <p className="flex items-center gap-2 text-sm text-gray-400 mt-1">
+              <MapPin size={14} /> Leeds, United Kingdom
+            </p>
+          </div>
         </div>
+
+        <button className="flex items-center gap-2 bg-orange-500 text-white px-5 py-2.5 rounded-lg hover:bg-orange-600 transition">
+          <Pencil size={16} />
+          Edit Profile
+        </button>
       </div>
 
-      {/* Personal Information */}
-      <div className="bg-white rounded-xl shadow p-6 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold text-lg">Personal Information</h3>
-          <button className="flex items-center gap-2 text-sm bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">
-            <Pencil size={16} />
+      {/* Personal Info */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-800">
+            Personal Information
+          </h3>
+
+          <button className="flex items-center gap-2 text-sm text-orange-500 hover:underline">
+            <Pencil size={14} />
             Edit
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-          <Info label="First Name" value="Natashia" />
-          <Info label="Last Name" value="Khaleira" />
-          <Info label="Date of Birth" value="12-10-1990" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div>
+            <p className="text-sm text-gray-400">First Name</p>
+            <p className="flex items-center gap-2 font-medium text-gray-800 mt-1">
+              <User size={14} /> Natashia
+            </p>
+          </div>
 
-          <Info label="Email Address" value="info@binary-fusion.com" />
-          <Info label="Phone Number" value="(+62) 821 2554-5846" />
-          <Info label="User Role" value="Admin" />
+          <div>
+            <p className="text-sm text-gray-400">Last Name</p>
+            <p className="flex items-center gap-2 font-medium text-gray-800 mt-1">
+              <User size={14} /> Khaleira
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">Date of Birth</p>
+            <p className="flex items-center gap-2 font-medium text-gray-800 mt-1">
+              <Calendar size={14} /> 12-10-1990
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">Email Address</p>
+            <p className="flex items-center gap-2 font-medium text-gray-800 mt-1">
+              <Mail size={14} /> info@binary-fusion.com
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">Phone Number</p>
+            <p className="flex items-center gap-2 font-medium text-gray-800 mt-1">
+              <Phone size={14} /> (+62) 821 2554-5846
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">User Role</p>
+            <p className="flex items-center gap-2 font-medium text-gray-800 mt-1">
+              <Shield size={14} /> Admin
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Address */}
-      <div className="bg-white rounded-xl shadow p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold text-lg">Address</h3>
-          <button className="flex items-center gap-2 text-sm border px-4 py-2 rounded-md hover:bg-gray-100">
-            <Pencil size={16} />
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-800">Address</h3>
+
+          <button className="flex items-center gap-2 text-sm text-orange-500 hover:underline">
+            <Pencil size={14} />
             Edit
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-          <Info label="Country" value="United Kingdom" />
-          <Info label="City" value="Leeds, East London" />
-          <Info label="Postal Code" value="ERT 1254" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <p className="text-sm text-gray-400">Country</p>
+            <p className="font-medium text-gray-800 mt-1">United Kingdom</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">City</p>
+            <p className="font-medium text-gray-800 mt-1">
+              Leeds, East London
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400">Postal Code</p>
+            <p className="font-medium text-gray-800 mt-1">ERT 1254</p>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* Reusable Info Component */
-function Info({ label, value }) {
-  return (
-    <div>
-      <p className="text-gray-400 mb-1">{label}</p>
-      <p className="font-medium text-gray-800">{value}</p>
     </div>
   );
 }
