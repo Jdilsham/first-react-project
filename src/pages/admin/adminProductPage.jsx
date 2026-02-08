@@ -1,27 +1,87 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { CiCirclePlus } from "react-icons/ci";
+import toast from "react-hot-toast";
 
-function ProductDeleteConfirm(props){
-    const productid = props.product_id;
-    const close = props.close;
 
-    return <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-100 flex justify-center items-center">
-        <div className="w-[500px] h-[300px] bg-white relative">
-            <button onClick={close} className="absolute right-[0px] w-[40px] h-[40px] rounded-full bg-red-600 text-white hover:color-brown-300">
-                X
-            </button>
+
+function ProductDeleteConfirm(props) {
+  const productid = props.product_id;
+  const close = props.close;
+
+  async function deleteProduct(){
+    const token = localStorage.getItem("token");
+    await axios.delete(import.meta.env.VITE_API_URL + "/api/products",productid,{
+        headers: {
+             Authorization : "Bearer "+token
+        }
+    })
+    .then((response)=>{
+        console.log(response);
+        close();
+        toast.success("Product delete successfully");
+    }).catch(()=>{
+        toast.error("Faild to delete product")
+    })
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="w-[500px] rounded-2xl bg-white shadow-2xl p-8 relative animate-fadeIn">
+        
+        {/* Close button */}
+        <button
+          onClick={close}
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-red-500 text-white font-bold flex items-center justify-center hover:bg-red-600 transition"
+        >
+          ✕
+        </button>
+
+        {/* Icon */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-3xl">
+            🗑️
+          </div>
         </div>
+
+        {/* Text */}
+        <h2 className="text-xl font-semibold text-center text-gray-800 mb-2">
+          Delete Product
+        </h2>
+        <p className="text-center text-gray-600 mb-8">
+          Are you sure you want to delete this product? ID: {productid}
+          <br />This action cannot be undone.
+        </p>
+
+        {/* Buttons */}
+        <div className="flex justify-center gap-6">
+          <button
+            onClick={close}
+            className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            className="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition shadow-md"
+            onClick={deleteProduct()}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
+  );
 }
 
 export default function AdminProductPage() {
 
   const [products, setProducts] = useState([]);
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
+  const [deleteProduct, setProductsToDelete] = useState("");
   const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,7 +98,7 @@ export default function AdminProductPage() {
   return (
     <div className="w-full h-full p-6 bg-[color:var(--color-secondary)]">
         {
-            isDeleteConfirmVisible && <ProductDeleteConfirm close={()=>{setIsDeleteConfirmVisible(false)}}/>
+            isDeleteConfirmVisible && <ProductDeleteConfirm product_id={deleteProduct} close={()=>{setIsDeleteConfirmVisible(false)}}/>
         }
         <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-[color:var(--color-primary)]">
             <CiCirclePlus />
@@ -123,6 +183,7 @@ export default function AdminProductPage() {
                     <div className="flex gap-5">
                         <button 
                             onClick={()=>{
+                               setProductsToDelete(item.product_id)
                                setIsDeleteConfirmVisible(true)
                             }}
                         >
