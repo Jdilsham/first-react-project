@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="w-full h-[80px] bg-accent text-white relative">
+    <header className="w-full h-[80px] bg-primary text-white relative">
       
       {/* Logo */}
       <div className="absolute left-10 top-0 h-full flex items-center">

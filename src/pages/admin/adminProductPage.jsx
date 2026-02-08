@@ -5,28 +5,33 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { CiCirclePlus } from "react-icons/ci";
 import toast from "react-hot-toast";
-
+import LoaderRound from "../../components/loader.jsx";
 
 
 function ProductDeleteConfirm(props) {
   const productid = props.product_id;
   const close = props.close;
+  const refresh = props.refresh;
 
-  async function deleteProduct(){
-    const token = localStorage.getItem("token");
-    await axios.delete(import.meta.env.VITE_API_URL + "/api/products",productid,{
-        headers: {
-             Authorization : "Bearer "+token
+    async function deleteProduct(){
+        try{
+            const token = localStorage.getItem("token");
+
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/products/${productid}`,{
+                headers: {
+                    Authorization : "Bearer "+token
+                }
+            });
+            console.log(response.data);
+            toast.success("Product deleted successfully");
+            close();
+            refresh();
+
+        }catch(error){
+            console.error(error);
+            toast.error("Failed to delete product");
         }
-    })
-    .then((response)=>{
-        console.log(response);
-        close();
-        toast.success("Product delete successfully");
-    }).catch(()=>{
-        toast.error("Faild to delete product")
-    })
-  }
+    }
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
@@ -67,7 +72,7 @@ function ProductDeleteConfirm(props) {
 
           <button
             className="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition shadow-md"
-            onClick={deleteProduct()}
+            onClick={deleteProduct}
           >
             Delete
           </button>
@@ -82,23 +87,30 @@ export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const [deleteProduct, setProductsToDelete] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
     useEffect(() => {
-        axios
-        .get(import.meta.env.VITE_API_URL + "/api/products")
-        .then((response) => {
-            setProducts(response.data);
-        })
-        .catch((error)=>{
-            console.log(error);
-        });
-    }, []);
+        if(isLoading){
+            axios
+            .get(import.meta.env.VITE_API_URL + "/api/products")
+            .then((response) => {
+                setProducts(response.data);
+                setIsLoading(false)
+            })
+            
+            .catch((error)=>{
+                console.log(error);
+            });
+        }
+        
+    }, [isLoading]);
 
   return (
     <div className="w-full h-full p-6 bg-[color:var(--color-secondary)]">
         {
-            isDeleteConfirmVisible && <ProductDeleteConfirm product_id={deleteProduct} close={()=>{setIsDeleteConfirmVisible(false)}}/>
+            isDeleteConfirmVisible && <ProductDeleteConfirm product_id={deleteProduct} refresh={()=>{setIsLoading(true)}} close={()=>{setIsDeleteConfirmVisible(false)}}/>
         }
         <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-5xl hover:text-[color:var(--color-primary)]">
             <CiCirclePlus />
@@ -106,7 +118,7 @@ export default function AdminProductPage() {
 
         <div className="bg-[color:var(--color-card)] rounded-xl shadow-lg overflow-hidden border border-[color:var(--color-border)]">
 
-            <table className="w-full text-sm text-left text-[color:var(--color-text)]">
+            {isLoading?<LoaderRound/>:<table className="w-full text-sm text-left text-[color:var(--color-text)]">
 
             {/* TABLE HEADER */}
             <thead className="bg-gray-300 text-[color:var(--color-text-muted)] uppercase text-xs tracking-wider">
@@ -207,7 +219,7 @@ export default function AdminProductPage() {
                 ))}
             </tbody>
 
-            </table>
+            </table>}
           
         </div>
     </div>
