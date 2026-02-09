@@ -35,7 +35,7 @@ export default function ProductPage(){
                 sm:grid-cols-3
                 md:grid-cols-4
                 lg:grid-cols-5
-                gap-8
+                gap-50
                 ">
                 {products.map((item) => (
                     <ProductCard key={item.product_id} product={item} />
