@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function ProductCard({product}){
   return(
 
@@ -63,9 +65,13 @@ export default function ProductCard({product}){
             )}
           </div>
 
-          <button className="
+          <Link to={"/overview/"+product.product_id} className="
+            flex
+            items-center
+            justify-center
             mt-3
             w-full
+            h-[40px]
             py-2
             border-2
             rounded-md
@@ -76,9 +82,9 @@ export default function ProductCard({product}){
             transition
             duration-400
             
-          ">
-            View Details
-          </button>
+          " >
+            View Product
+          </Link>
         </div>
 
       </div>
