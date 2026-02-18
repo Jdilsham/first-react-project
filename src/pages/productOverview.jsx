@@ -1,173 +1,272 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import Loader from "../components/loader";
 
+const money = (v) => `Rs. ${Number(v || 0).toLocaleString("en-LK")}`;
 
-export default function ProductOverview(){
-    const params = useParams();
-    const [product, setProducts] = useState(null);
-    const [status, setStatus] = useState("loading");
-    const [activeImage, setActiveImage] = useState(0);
+export default function ProductOverview() {
+  const params = useParams();
+  const [product, setProduct] = useState(null);
+  const [status, setStatus] = useState("loading");
+  const [activeImage, setActiveImage] = useState(0);
 
-    useEffect(()=>{
-        axios.get(import.meta.env.VITE_API_URL + "/api/products/"+params.id)
-        .then((response)=>{
-            setProducts(response.data)
-            setStatus("success")
-            toast.success("Success");
-        })
-        .catch((error)=>{
-            console.log(error);
-            toast.error("Failed to load product");
-            setStatus("error")
-        })
+  useEffect(() => {
+    setStatus("loading");
+    setProduct(null);
+    setActiveImage(0);
 
-    },[])
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/products/${params.id}`)
+      .then((res) => {
+        setProduct(res.data);
+        setStatus("success");
+        toast.success("Loaded");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Failed to load product");
+        setStatus("error");
+      });
+  }, [params.id]);
 
-    return(
+  const images = useMemo(() => product?.images || [], [product]);
+  const mainImage = images?.[activeImage] || images?.[0] || "";
 
-        <div className="min-h-screen bg-gray-50 py-10 px-4">
-            {status === "loading" && (
-            <div className="flex justify-center items-center h-[60vh]">
-                <Loader />
+  return (
+  <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--color-secondary)/55,_#ffffff_55%)]">
+    <div className="mx-auto max-w-7xl px-4 py-10">
+      {/* Loading */}
+      {status === "loading" && (
+        <div className="flex justify-center items-center h-[60vh]">
+          <Loader />
+        </div>
+      )}
+
+      {/* Error */}
+      {status === "error" && (
+        <div className="flex justify-center items-center h-[60vh]">
+          <div className="rounded-3xl border bg-white/80 backdrop-blur p-8 shadow-[0_10px_30px_rgba(0,0,0,0.08)] text-center">
+            <h1 className="text-xl font-semibold text-[--color-accent]">
+              Failed to load product details
+            </h1>
+            <p className="mt-2 text-sm text-[--color-text-muted]">
+              Please refresh and try again.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Success */}
+      {status === "success" && product && (
+        <>
+          {/* Top header row */}
+          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold tracking-wide text-[--color-text-muted]">
+                PRODUCTS / DETAILS
+              </p>
+              <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold text-[--color-text]">
+                {product.name}
+              </h1>
             </div>
-            )}
 
-            {status === "error" && (
-            <div className="flex justify-center items-center h-[60vh]">
-                <h1 className="text-xl text-red-500 font-semibold">
-                Failed to load product details
-                </h1>
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={[
+                  "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold",
+                  "border bg-white/70 backdrop-blur",
+                  product.stock > 0
+                    ? "border-[--color-primary]/30 text-[--color-primary]"
+                    : "border-[--color-accent]/30 text-[--color-accent]",
+                ].join(" ")}
+              >
+                {product.stock > 0 ? "In Stock" : "Out of Stock"}
+              </span>
+
+              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border bg-white/70 backdrop-blur text-[--color-text] border-gray-200">
+                {product.category || "Uncategorized"}
+              </span>
             </div>
-            )}
-            
-            {status === "success" && product && (
-            <div className="min-h-screen bg-gray-50 py-10 px-4">
-                <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+          </div>
 
-                {/* LEFT : IMAGE GALLERY */}
-                <div>
-                   {/* {/* Main Image 
-                    <div className="w-full h-[420px] bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center">
-                    <img
-                        src={product.images?.[activeImage]}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-all duration-300"
-                    />
-                    </div>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+            {/* LEFT: Gallery */}
+            <div className="lg:col-span-7">
+              <div className="rounded-[28px] border bg-white/70 backdrop-blur overflow-hidden shadow-[0_14px_45px_rgba(0,0,0,0.10)]">
+                {/* Main image */}
+                <div className="relative aspect-[16/11] bg-gradient-to-br from-white to-gray-50">
+                  {/* floating meta */}
+                  <div className="absolute left-5 top-5 flex items-center gap-2">
+                    <span className="rounded-full border bg-white/80 px-3 py-1 text-xs font-semibold text-[--color-text] backdrop-blur">
+                      {product.images?.length || 0} Photos
+                    </span>
+                    <span className="rounded-full border bg-white/80 px-3 py-1 text-xs font-semibold text-[--color-text] backdrop-blur">
+                      Stock: {product.stock ?? 0}
+                    </span>
+                  </div>
 
-                    {/* Thumbnails 
-                    {product.images?.length > 1 && (
-                    <div className="flex gap-3 mt-4">
-                        {product.images.map((img, index) => (
-                        <button
-                            key={index}
-                            onClick={() => setActiveImage(index)}
-                            className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition
-                            ${activeImage === index ? "border-green-500" : "border-gray-200"}
-                            `}
-                        >
-                            <img
-                            src={img}
-                            alt={`thumb-${index}`}
-                            className="w-full h-full object-cover"
-                            />
-                        </button>
-                        ))}
-                    </div>
-                    )} */}
+                  <img
+                    src={product.images?.[activeImage]}
+                    alt={product.name}
+                    className="h-full w-full object-contain p-6 sm:p-10"
+                    draggable="false"
+                  />
 
-                    {/* Main Image */}
-                    <div className="w-full h-[420px] bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center">
-                        <img 
-                            src={product.images?.[activeImage]}
-                            alt={product.name}
-                            className="w-full h-full object-cover transition-all duration-300"
-                        />
-                    </div>
-                    
-                    {/* Thumbnails */}
-                    <div>
-                        
-                    </div>
-
+                  {/* soft vignette */}
+                  <div className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(circle_at_center,black,transparent_70%)] bg-black/10" />
                 </div>
 
-                {/* RIGHT : PRODUCT DETAILS */}
-                <div className="flex flex-col space-y-6">
+                {/* Thumbnails */}
+                {product.images?.length > 1 && (
+                  <div className="border-t bg-white/60 p-4">
+                    <div className="flex gap-3 overflow-x-auto pb-1">
+                      {product.images.map((img, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setActiveImage(index)}
+                          className={[
+                            "group shrink-0 rounded-2xl p-1 transition",
+                            "border bg-white/70 backdrop-blur",
+                            "hover:shadow-md",
+                            activeImage === index
+                              ? "border-[--color-primary] ring-2 ring-[--color-primary]/25"
+                              : "border-gray-200",
+                          ].join(" ")}
+                          aria-label={`Select image ${index + 1}`}
+                        >
+                          <img
+                            src={img}
+                            alt={`thumb-${index}`}
+                            className="h-20 w-20 rounded-xl object-cover"
+                            draggable="false"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
-                    {/* Title */}
-                    <h1 className="text-3xl font-bold text-gray-800">
-                    {product.name}
-                    </h1>
+              {/* Modern feature pills */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                <span className="rounded-full border bg-white/70 backdrop-blur px-3 py-2 text-xs font-semibold text-[--color-text] border-gray-200">
+                  Secure payments
+                </span>
+                <span className="rounded-full border bg-white/70 backdrop-blur px-3 py-2 text-xs font-semibold text-[--color-text] border-gray-200">
+                  Fast delivery
+                </span>
+                <span className="rounded-full border bg-white/70 backdrop-blur px-3 py-2 text-xs font-semibold text-[--color-text] border-gray-200">
+                  Easy returns
+                </span>
+              </div>
+            </div>
 
-                    {/* Stock */}
-                    <span
-                    className={`w-fit px-4 py-1 text-sm rounded-full font-medium
-                        ${product.stock > 0
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                        }
-                    `}
-                    >
-                    {product.stock > 0 ? "In Stock" : "Out of Stock"}
-                    </span>
+            {/* RIGHT: Details */}
+            <div className="lg:col-span-5">
+              <div className="lg:sticky lg:top-6 rounded-[28px] border bg-white/75 backdrop-blur p-6 sm:p-7 shadow-[0_14px_45px_rgba(0,0,0,0.10)]">
+                {/* Price */}
+                <div className="rounded-2xl border bg-gradient-to-br from-white to-gray-50 p-5">
+                  <p className="text-xs font-semibold text-[--color-text-muted]">
+                    Price
+                  </p>
 
-                    {/* Price */}
-                    <div className="flex items-center gap-4">
-                    <span className="text-3xl font-semibold text-green-600">
-                        Rs. {product.price}
-                    </span>
-
-                    {product.labeled_price && (
-                        <span className="text-lg text-gray-400 line-through">
-                        Rs. {product.labeled_price}
-                        </span>
-                    )}
+                  <div className="mt-2 flex items-end justify-between gap-3">
+                    <div className="text-3xl font-extrabold text-[--color-text]">
+                      Rs. {Number(product.price || 0).toLocaleString("en-LK")}
                     </div>
 
-                    {/* Description */}
-                    <p className="text-gray-600 leading-relaxed">
-                    {product.description || "No description available for this product."}
+                    {product.labeled_price ? (
+                      <div className="text-right">
+                        <p className="text-[11px] font-semibold text-[--color-text-muted]">
+                          Old price
+                        </p>
+                        <p className="text-sm text-gray-400 line-through">
+                          Rs.{" "}
+                          {Number(product.labeled_price || 0).toLocaleString(
+                            "en-LK"
+                          )}
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-3 text-xs text-[--color-text-muted]">
+                    Stock Available:{" "}
+                    <span className="font-semibold text-[--color-text]">
+                      {product.stock ?? 0}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="mt-5">
+                  <p className="text-sm leading-relaxed text-[--color-text-muted]">
+                    {product.description ||
+                      "No description available for this product."}
+                  </p>
+                </div>
+
+                {/* Info cards */}
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl border bg-white/70 p-4">
+                    <p className="text-[11px] font-semibold text-[--color-text-muted]">
+                      Category
                     </p>
+                    <p className="mt-1 font-semibold text-[--color-text]">
+                      {product.category || "N/A"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border bg-white/70 p-4">
+                    <p className="text-[11px] font-semibold text-[--color-text-muted]">
+                      Availability
+                    </p>
+                    <p className="mt-1 font-semibold text-[--color-text]">
+                      {product.stock > 0 ? "Ready to ship" : "Not available"}
+                    </p>
+                  </div>
+                </div>
 
-                    {/* Info Grid */}
-                    <div className="grid grid-cols-2 gap-6 text-sm">
-                    <div>
-                        <p className="text-gray-500">Category</p>
-                        <p className="font-medium text-gray-800">
-                        {product.category || "N/A"}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-gray-500">Stock Available</p>
-                        <p className="font-medium text-gray-800">
-                        {product.stock}
-                        </p>
-                    </div>
-                    </div>
-
-                    {/* CTA */}
+                {/* Actions */}
+                <div className="mt-7 space-y-3">
+                  {/* Buy Now - modern gradient */}
                     <button
                     disabled={product.stock <= 0}
-                    className={`
-                        mt-6 h-[50px] rounded-xl text-white text-lg font-medium transition
-                        ${product.stock > 0
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-gray-400 cursor-not-allowed"
-                        }
-                    `}
+                    className={[
+                        "h-12 w-full rounded-2xl text-white font-semibold transition-all duration-200",
+                        "focus:outline-none focus:ring-4 focus:ring-green-500/30",
+                        product.stock > 0
+                        ? "bg-green-500 hover:bg-green-600 active:scale-[0.98] shadow-sm hover:shadow-md"
+                        : "bg-gray-300 cursor-not-allowed shadow-none",
+                    ].join(" ")}
+                    >
+                    Buy Now
+                    </button>
+
+                    <button
+                    disabled={product.stock <= 0}
+                    className={[
+                        "h-12 w-full rounded-2xl font-semibold transition-all duration-200",
+                        "focus:outline-none focus:ring-4 focus:ring-yellow-400/30",
+                        product.stock > 0
+                        ? "bg-yellow-300 text-gray-800 hover:bg-yellow-400 active:scale-[0.98] shadow-sm hover:shadow-md"
+                        : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none",
+                    ].join(" ")}
                     >
                     Add to Cart
                     </button>
-                </div>
-                </div>
-            </div>
-            )}
-            
-        </div>
-    );
 
+                  <div className="pt-2 text-center text-xs text-[--color-text-muted]">
+                    Secure checkout • Fast delivery • Easy returns
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+);
 }
