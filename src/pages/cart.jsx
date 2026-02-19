@@ -165,7 +165,6 @@ export default function Cart() {
                             </div>
                           </div>
 
-                          {/* Remove (UI only) */}
                           <button
                             type="button"
                             className="h-10 w-10 rounded-2xl soft-border border bg-white/90 hover:bg-red-50 transition focus:outline-none focus:ring-4 focus:ring-red-500/15"
