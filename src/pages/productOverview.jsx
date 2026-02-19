@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import Loader from "../components/loader";
+import { addToCart, loadCart } from "../../utils/cart";
 
-const money = (v) => `Rs. ${Number(v || 0).toLocaleString("en-LK")}`;
 
 export default function ProductOverview() {
   const params = useParams();
@@ -30,9 +30,6 @@ export default function ProductOverview() {
         setStatus("error");
       });
   }, [params.id]);
-
-  const images = useMemo(() => product?.images || [], [product]);
-  const mainImage = images?.[activeImage] || images?.[0] || "";
 
   return (
   <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--color-secondary)/55,_#ffffff_55%)]">
@@ -240,6 +237,9 @@ export default function ProductOverview() {
                         ? "bg-green-500 hover:bg-green-600 active:scale-[0.98] shadow-sm hover:shadow-md"
                         : "bg-gray-300 cursor-not-allowed shadow-none",
                     ].join(" ")}
+                    onClick={()=> {
+                      console.log(loadCart())
+                    }}
                     >
                     Buy Now
                     </button>
@@ -253,6 +253,10 @@ export default function ProductOverview() {
                         ? "bg-yellow-300 text-gray-800 hover:bg-yellow-400 active:scale-[0.98] shadow-sm hover:shadow-md"
                         : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none",
                     ].join(" ")}
+                    onClick={() => {
+                      console.log(product.labeled_price, product.price);
+                      addToCart(product, 1);
+                    }}
                     >
                     Add to Cart
                     </button>

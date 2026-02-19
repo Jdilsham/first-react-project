@@ -60,10 +60,68 @@
 .btn-primary {
   @apply h-12 w-full rounded-2xl text-white font-semibold transition
          focus:outline-none focus:ring-4;
-  background: var(--color-primary);
+  background-color: var(--color-primary);
 }
 
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Premium background used across pages */
+.page-bg {
+  background: radial-gradient(
+    ellipse at top,
+    color-mix(in oklab, var(--color-secondary) 55%, white 45%),
+    #ffffff 55%
+  );
+}
+
+/* Soft glass card */
+.glass {
+  background: color-mix(in oklab, white 75%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* Secondary button */
+.btn-soft {
+  @apply h-12 w-full rounded-2xl font-semibold transition
+  border bg-white hover:bg-gray-50
+  focus:outline-none focus:ring-4;
+  border-color: var(--color-border);
+}
+
+/* Small pill */
+.pill {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border;
+  border-color: var(--color-border);
+  background: color-mix(in oklab, white 70%, transparent);
+}
+
+
+/* Modern page background */
+.page-bg {
+  background: radial-gradient(
+    ellipse at top,
+    color-mix(in oklab, var(--color-secondary) 35%, white 65%),
+    #ffffff 60%
+  );
+}
+
+/* Glass surfaces */
+.glass {
+  background: color-mix(in oklab, white 78%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+/* Softer border (instead of dark outline look) */
+.soft-border {
+  border-color: color-mix(in oklab, var(--color-border) 70%, transparent);
+}
+
+/* Modern pills */
+.pill {
+  @apply inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold;
+  border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
+  background: color-mix(in oklab, white 70%, transparent);
 }

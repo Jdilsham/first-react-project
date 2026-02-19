@@ -3,6 +3,7 @@ import { Routes } from "react-router-dom";
 import Header from "../components/header";
 import ProductPage from "./productPage"
 import Overview from "./productOverview"
+import Cart from "./cart";
 
 export default function HomePage() {
     return (
@@ -16,7 +17,7 @@ export default function HomePage() {
                 <Route path="/contact" element={<h1 className="text-xl font-semibold text-gray-800">Contact Us</h1>} /> 
                 <Route path="/overview/:id" element={<Overview/>}></Route>
                 <Route path="/*" element={<h1 className="text-xl font-semibold text-gray-800">Page Not Found</h1>} />
-                
+                <Route path="/cart" element={<Cart/>} />
             </Routes>
         </div>
     );
