@@ -12,6 +12,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { startCheckoutFromCart } from "../../utils/checkout";
 
 const money = (v) => `Rs. ${Number(v || 0).toLocaleString("en-LK")}`;
 
@@ -278,7 +279,9 @@ export default function Cart() {
                   </div>
                 </div>
 
-                <button className="btn-primary mt-6">Proceed to Checkout</button>
+                <button className="btn-primary mt-6"
+                
+                >Proceed to Checkout</button>
                 <button className="btn-soft mt-3">Continue Shopping</button>
 
                 <div className="mt-5 grid grid-cols-2 gap-3">
