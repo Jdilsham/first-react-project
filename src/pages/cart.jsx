@@ -1,4 +1,5 @@
-import { loadCart } from "../../utils/cart";
+import { loadCart, removeFromCart, updateCartQuantity } from "../../utils/cart";
+import { useState } from "react";
 import {
   ShoppingCart,
   ShieldCheck,
@@ -10,6 +11,7 @@ import {
   CreditCard,
   CheckCircle2,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const money = (v) => `Rs. ${Number(v || 0).toLocaleString("en-LK")}`;
 
@@ -26,7 +28,20 @@ function percentOff(labeled, price) {
 }
 
 export default function Cart() {
-  const cart = loadCart();
+
+  const navigate = useNavigate();
+
+  const [cart, setCart] = useState(loadCart());
+
+  const handleRemove = (productId) => {
+    removeFromCart(productId);
+    setCart(loadCart());
+  }
+
+  const handleUpdateQuantity = (productId, delta) => {
+    updateCartQuantity(productId, delta);
+    setCart(loadCart());
+  }
 
   const subtotal = cart.reduce(
     (sum, it) => sum + toNum(it.price) * toNum(it.quantity),
@@ -98,7 +113,7 @@ export default function Cart() {
               Add products to see them here.
             </p>
             <div className="mt-6 mx-auto max-w-sm">
-              <button className="btn-primary">Browse Products</button>
+              <button className="btn-primary" onClick={() => navigate("/products")}>Browse Products</button>
             </div>
           </div>
         ) : (
@@ -169,6 +184,9 @@ export default function Cart() {
                             type="button"
                             className="h-10 w-10 rounded-2xl soft-border border bg-white/90 hover:bg-red-50 transition focus:outline-none focus:ring-4 focus:ring-red-500/15"
                             aria-label="Remove"
+                            onClick={()=>
+                              handleRemove(item.product_id)
+                            }
                           >
                             <Trash2 className="mx-auto h-4 w-4 text-[--color-accent]" />
                           </button>
@@ -178,13 +196,21 @@ export default function Cart() {
                         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                           {/* Qty (UI only) */}
                           <div className="inline-flex items-center gap-2 rounded-2xl soft-border border bg-white/90 px-2 py-2 w-fit shadow-sm">
-                            <button className="h-9 w-9 rounded-xl soft-border border hover:bg-gray-50 transition">
+                            <button className="h-9 w-9 rounded-xl soft-border border hover:bg-gray-50 transition"
+                              onClick={() => 
+                                handleUpdateQuantity(item.product_id, -1)
+                              }
+                            >
                               <Minus className="mx-auto h-4 w-4" />
                             </button>
                             <span className="min-w-[44px] text-center font-semibold text-[--color-text]">
                               {item.quantity}
                             </span>
-                            <button className="h-9 w-9 rounded-xl soft-border border hover:bg-gray-50 transition">
+                            <button className="h-9 w-9 rounded-xl soft-border border hover:bg-gray-50 transition"
+                              onClick={() => 
+                                handleUpdateQuantity(item.product_id, 1)
+                              }
+                            >
                               <Plus className="mx-auto h-4 w-4" />
                             </button>
                           </div>

@@ -50,3 +50,31 @@ export function addToCart(product, quantity) {
   localStorage.setItem("cart", JSON.stringify(cart));
   toast.success("Product added to cart");
 }
+
+export function removeFromCart(productId) {
+  let cart = loadCart();
+
+  cart = cart.filter((item) => item.product_id !== productId);
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  toast.success("Product removed from cart");
+}
+
+export function updateCartQuantity(productId, delta) {
+  let cart = loadCart();
+
+  const itemIndex = cart.findIndex((item) => item.product_id === productId);
+
+  if (itemIndex === -1) {
+    return;
+  }
+
+  cart[itemIndex].quantity += delta;
+
+  if (cart[itemIndex].quantity < 1) {
+    cart[itemIndex].quantity = 1;
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+}

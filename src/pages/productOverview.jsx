@@ -238,7 +238,7 @@ export default function ProductOverview() {
                         : "bg-gray-300 cursor-not-allowed shadow-none",
                     ].join(" ")}
                     onClick={()=> {
-                      console.log(loadCart())
+                      toast.error("Buy Now is not implemented yet");
                     }}
                     >
                     Buy Now
@@ -254,7 +254,6 @@ export default function ProductOverview() {
                         : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none",
                     ].join(" ")}
                     onClick={() => {
-                      console.log(product.labeled_price, product.price);
                       addToCart(product, 1);
                     }}
                     >
