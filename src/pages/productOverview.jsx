@@ -4,9 +4,13 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import Loader from "../components/loader";
 import { addToCart, loadCart } from "../../utils/cart";
+import { startCheckoutBuyNow } from "../../utils/checkout";
+import { useNavigate } from "react-router-dom";
 
 
 export default function ProductOverview() {
+const navigate = useNavigate();
+
   const params = useParams();
   const [product, setProduct] = useState(null);
   const [status, setStatus] = useState("loading");
@@ -238,7 +242,8 @@ export default function ProductOverview() {
                         : "bg-gray-300 cursor-not-allowed shadow-none",
                     ].join(" ")}
                     onClick={()=> {
-                      toast.error("Buy Now is not implemented yet");
+                      startCheckoutBuyNow(product, 1);
+                      navigate("/checkout"); 
                     }}
                     >
                     Buy Now

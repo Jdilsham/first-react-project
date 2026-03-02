@@ -280,7 +280,10 @@ export default function Cart() {
                 </div>
 
                 <button className="btn-primary mt-6"
-                
+                  onClick={()=>{
+                    startCheckoutFromCart();
+                    navigate("/checkout")
+                  }}
                 >Proceed to Checkout</button>
                 <button className="btn-soft mt-3">Continue Shopping</button>
 
