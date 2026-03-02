@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadCheckoutItems, clearCheckoutItems } from "../../utils/checkout";
-import { loadCart } from "../../utils/cart";
 import toast from "react-hot-toast";
 import { CreditCard, ShieldCheck, Truck, CheckCircle2 } from "lucide-react";
+import { apiPost } from "../../utils/api";
 
 const money = (v) => `Rs. ${Number(v || 0).toLocaleString("en-LK")}`;
 const toNum = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
@@ -27,23 +27,41 @@ export default function Checkout() {
 
   const onChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
-  const placeOrder = () => {
-    if (items.length === 0) {
-      toast.error("No items to checkout");
-      return;
-    }
-    if (!form.fullName || !form.phone || !form.address) {
-      toast.error("Please fill name, phone, and address");
-      return;
-    }
+  const placeOrder = async () => {
+  if (items.length === 0) {
+    toast.error("No items to checkout");
+    return;
+  }
+  if (!form.fullName || !form.phone || !form.address) {
+    toast.error("Please fill name, phone, and address");
+    return;
+  }
 
-    // TODO: call backend API here
-    // await api.post("/orders", { items, ...form })
+  try {
+    const payload = {
+      customerName: form.fullName,
+      email: "test@gmail.com", 
+      phone: form.phone,
+      address: form.address,
+      items: items.map((it) => ({
+        productID: String(it.product_id), 
+        price: Number(it.price),
+        quantity: Number(it.quantity),
+        image: it.image || "",
+      })),
+    };
+
+    const data = await apiPost("/api/orders", payload);
 
     clearCheckoutItems();
-    toast.success("Order placed successfully!");
-    navigate("/order-success"); // create simple page or navigate home
-  };
+    localStorage.removeItem("cart"); // optional: clear cart after order placed
+    toast.success(`Order placed! (${data.orderID || "OK"})`);
+
+    navigate("/order-success");
+  } catch (err) {
+    toast.error(err.message || "Failed to place order");
+  }
+};
 
   return (
     <div className="min-h-[calc(100vh-80px)] page-bg px-4 py-10">
